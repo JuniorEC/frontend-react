@@ -21,17 +21,18 @@ class ClientList extends Component {
             currentVotes: [],
             isLoading: false
         };
+        console.log(props);
         this.loadClientList = this.loadClientList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
     loadClientList(page = 0, size = CLIENT_LIST_SIZE) {
         let promise;
-        if(this.props.username) {
+        if(!this.props.currentUser) {
             if(this.props.type === 'USER_CREATED_CLIENTS') {
-                promise = getUserCreatedClients(this.props.username, page, size);
+                promise = getUserCreatedClients(this.props.currentUser.login, page, size);
             } else if (this.props.type === 'USER_VOTED_CLIENTS') {
-                promise = getUserVotedClients(this.props.username, page, size);                               
+                promise = getUserVotedClients(this.props.currentUser.login, page, size);                               
             }
         } else {
             promise = getAllClients(page, size);
@@ -47,17 +48,17 @@ class ClientList extends Component {
 
         promise            
         .then(response => {
-            const clients = this.state.clients.slice();
+            const clients = response.slice();
+            console.log(response)
             const currentVotes = this.state.currentVotes.slice();
-
             this.setState({
-                clients: clients.concat(response.content),
+                clients: clients,
                 page: response.page,
                 size: response.size,
-                totalElements: response.totalElements,
+                totalElements: response.lenght+1,
                 totalPages: response.totalPages,
                 last: response.last,
-                currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
+                currentVotes: currentVotes.concat(Array(response.length).fill(null)),
                 isLoading: false
             })
         }).catch(error => {

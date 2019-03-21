@@ -25,13 +25,14 @@ class Profile extends Component {
         this.setState({
             isLoading: true
         });
-
+        
         getUserProfile(username)
         .then(response => {
             this.setState({
                 user: response,
                 isLoading: false
             });
+        console.log(this.state);
         }).catch(error => {
             if(error.status === 404) {
                 this.setState({
@@ -48,12 +49,14 @@ class Profile extends Component {
     }
       
     componentDidMount() {
-        const username = this.props.match.params.username;
+        const username = this.props.currentUser.login;
         this.loadUserProfile(username);
     }
 
     componentDidUpdate(nextProps) {
         if(this.props.match.params.username !== nextProps.match.params.username) {
+            console.log(this.props);
+            console.log(nextProps);
             this.loadUserProfile(nextProps.match.params.username);
         }        
     }
@@ -88,7 +91,7 @@ class Profile extends Component {
                                 </div>
                                 <div className="user-summary">
                                     <div className="full-name">{this.state.user.name}</div>
-                                    <div className="username">@{this.state.user.username}</div>
+                                    <div className="username">@{this.state.user.login}</div>
                                     <div className="user-joined">
                                         Joined {formatDate(this.state.user.joinedAt)}
                                     </div>
@@ -100,11 +103,11 @@ class Profile extends Component {
                                     tabBarStyle={tabBarStyle}
                                     size="large"
                                     className="profile-tabs">
-                                    <TabPane tab={`${this.state.user.clientCount} Clients`} key="1">
-                                        <ClientList username={this.props.match.params.username} type="USER_CREATED_CLIENTS" />
+                                    <TabPane tab={`${this.state.user.name} Clients`} key="1">
+                                        <ClientList username={this.props.currentUser.login} type="USER_CREATED_CLIENTS" />
                                     </TabPane>
                                     <TabPane tab={`${this.state.user.voteCount} Votes`}  key="2">
-                                        <ClientList username={this.props.match.params.username} type="USER_VOTED_CLIENTS" />
+                                        <ClientList username={this.props.currentUser.login} type="USER_VOTED_CLIENTS" />
                                     </TabPane>
                                 </Tabs>
                             </div>  

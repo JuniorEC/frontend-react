@@ -28,14 +28,14 @@ export function getAllClients(page, size) {
     size = size || CLIENT_LIST_SIZE;
 
     return request({
-        url: API_BASE_URL + "/clients?page=" + page + "&size=" + size,
+        url: API_BASE_URL + "/clientes?page=" + page + "&size=" + size,
         method: 'GET'
     });
 }
 
 export function createClient(clientData) {
     return request({
-        url: API_BASE_URL + "/clients",
+        url: API_BASE_URL + "/clientes",
         method: 'POST',
         body: JSON.stringify(clientData)         
     });
@@ -43,7 +43,7 @@ export function createClient(clientData) {
 
 export function castVote(voteData) {
     return request({
-        url: API_BASE_URL + "/clients/" + voteData.clientId + "/votes",
+        url: API_BASE_URL + "/clientes/" + voteData.clientId + "/votes",
         method: 'POST',
         body: JSON.stringify(voteData)
     });
@@ -62,6 +62,22 @@ export function signup(signupRequest) {
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
+    });
+}
+
+export function subscribeEmail(email) {
+    return request({
+        url: API_BASE_URL + "/emails/"+email.clienteId,
+        method: 'POST',
+        body: JSON.stringify(email)
+    });
+}
+
+export function subscribeCliente(cliente) {
+    return request({
+        url: API_BASE_URL + "/clientes",
+        method: 'POST',
+        body: JSON.stringify(cliente)
     });
 }
 
